@@ -38,7 +38,7 @@ logger = logging.getLogger(__name__)
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Arduino AI Battle — benchmark Nemotron vs GPT-4.1 on real forum bugs",
+        description="Arduino AI Battle — benchmark Nemotron vs GPT-5.4 Nano on real forum bugs",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--count", type=int, default=config.SCRAPE_COUNT,
@@ -134,7 +134,7 @@ def print_summary(results: list[EvalResult]) -> None:
     table = Table(title="⚡ Battle Summary", show_header=True, header_style="bold")
     table.add_column("Metric", style="dim")
     table.add_column("Nemotron", style="green")
-    table.add_column("GPT-4.1", style="cyan")
+    table.add_column("GPT-5.4 Nano", style="cyan")
 
     table.add_row("Wins", str(nem_wins), str(gpt_wins))
     table.add_row("Ties", str(ties), "—")
@@ -153,7 +153,7 @@ def print_summary(results: list[EvalResult]) -> None:
         cat_table = Table(title="Per-Category Winners", show_header=True, header_style="bold")
         cat_table.add_column("Category", style="dim")
         cat_table.add_column("Nemotron Wins", style="green")
-        cat_table.add_column("GPT-4.1 Wins", style="cyan")
+        cat_table.add_column("GPT-5.4 Nano Wins", style="cyan")
         cat_table.add_column("Ties")
 
         for cat in categories:

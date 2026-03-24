@@ -5,9 +5,32 @@
 [![Tests](https://img.shields.io/badge/tests-106%20passed-brightgreen)](tests/)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![GitHub](https://img.shields.io/badge/GitHub-nemotron--cascade--3--vs--gpt-181717?logo=github)](https://github.com/dakshjain-1616/nemotron-cascade-2-30b-vs-gpt)
+[![GitHub](https://img.shields.io/badge/GitHub-nemotron3--super--vs--gpt54--nano-181717?logo=github)](https://github.com/dakshjain-1616/nemotron3-super-vs-gpt54-nano)
 
 **Head-to-head battle between NVIDIA Nemotron 3 Super and OpenAI GPT-5.4 Nano on the messy, hardware-specific embedded bugs that real Arduino developers actually hit — not sanitised textbook exercises.**
+
+---
+
+## Real-World Benchmark Results
+
+Scored on 5 real Arduino forum bugs via OpenRouter (live API, no mocks):
+
+| Model | Wins | Avg Score | Compilability | Correctness | Verbosity | Avg Latency |
+|---|---|---|---|---|---|---|
+| **GPT-5.4 Nano** | **5** | **0.860** | 0.700 | 1.000 | 0.900 | 5,410 ms |
+| Nemotron 3 Super | 0 | 0.599 | 0.280 | 0.992 | 0.450 | 8,994 ms |
+
+Per-bug breakdown:
+
+| Bug | Nemotron | GPT-5.4 Nano | Winner |
+|---|---|---|---|
+| I2C bus hang — SDA never released | 0.455 | 0.560 | GPT |
+| Buffer overflow in `dtostrf()` call | 0.800 | 0.960 | GPT |
+| Timer1/Timer2 register conflict | 0.520 | 0.940 | GPT |
+| WDT misfire during EEPROM write | 0.720 | 0.920 | GPT |
+| `millis()` drift inside ISR | 0.500 | 0.920 | GPT |
+
+**Key finding:** Both models nail correctness (>99%) on these embedded bug categories. GPT-5.4 Nano wins on compilability (70% vs 28%) and structured verbosity — it consistently produces complete, runnable sketches. Nemotron 3 Super provides accurate analysis but often omits `void setup()`/`void loop()` wrappers in its responses. Nemotron also runs ~66% slower at this task (9s vs 5.4s average).
 
 ---
 
@@ -85,8 +108,8 @@ Five embedded failure modes drawn from real forum threads:
 No heavy ML dependencies. Pure Python plus the OpenAI SDK.
 
 ```bash
-git clone https://github.com/dakshjain-1616/nemotron-cascade-2-30b-vs-gpt
-cd nemotron-cascade-2-30b-vs-gpt
+git clone https://github.com/dakshjain-1616/nemotron3-super-vs-gpt54-nano
+cd nemotron3-super-vs-gpt54-nano
 pip install -r requirements.txt
 ```
 
@@ -253,7 +276,7 @@ pytest
 ## Project structure
 
 ```
-nemotron-cascade-2-30b-vs-gpt/
+nemotron3-super-vs-gpt54-nano/
 ├── nemotron_bench/          # Main Python package
 │   ├── __init__.py          # Public API exports
 │   ├── battle.py            # CLI entry point + run_battle() orchestrator
