@@ -39,7 +39,7 @@ def main() -> int:
     console.print()
     console.print(Panel.fit(
         "[bold]⚡ Arduino AI Battle — Demo[/bold]\n"
-        "Nemotron Cascade 3 vs GPT-4.1 on real Arduino bugs",
+        "Nemotron Cascade 3 vs GPT-5.4 Nano on real Arduino bugs",
         border_style="green",
     ))
 
@@ -85,7 +85,7 @@ def main() -> int:
         # Quick per-bug output
         winner_str = {
             "nemotron": f"[green]Nemotron[/green] ({result.nemotron_total:.2f})",
-            "gpt": f"[cyan]GPT-4.1[/cyan] ({result.gpt_total:.2f})",
+            "gpt": f"[cyan]GPT-5.4 Nano[/cyan] ({result.gpt_total:.2f})",
             "tie": f"[yellow]Tie[/yellow]",
         }.get(result.winner, result.winner)
         console.print(f"         Winner: {winner_str}")
@@ -104,10 +104,10 @@ def main() -> int:
 
     console.print()
     console.print(f"  [bold]Nemotron[/bold] wins: [green]{nem_wins}[/green]  |  "
-                  f"[bold]GPT-4.1[/bold] wins: [cyan]{gpt_wins}[/cyan]  |  "
+                  f"[bold]GPT-5.4 Nano[/bold] wins: [cyan]{gpt_wins}[/cyan]  |  "
                   f"Ties: [yellow]{ties}[/yellow]")
     console.print(f"  Avg scores — Nemotron: [green]{nem_avg:.3f}[/green]  "
-                  f"GPT-4.1: [cyan]{gpt_avg:.3f}[/cyan]")
+                  f"GPT-5.4 Nano: [cyan]{gpt_avg:.3f}[/cyan]")
 
     # ── Write outputs ──────────────────────────────────────────────────────────
     out_dir = os.getenv("OUTPUT_DIR", "./demo_results")

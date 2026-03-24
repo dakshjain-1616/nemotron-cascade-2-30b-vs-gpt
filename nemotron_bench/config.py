@@ -35,7 +35,7 @@ NEMOTRON_MODEL: str = os.getenv("NEMOTRON_MODEL", "nvidia/llama-3.3-nemotron-sup
 # ── OpenAI / GPT ─────────────────────────────────────────────────────────────
 OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
 OPENAI_API_BASE: str = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
-OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "openai/gpt-4.1")
+OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "openai/gpt-4.5-turbo")
 
 # ── Arduino CLI ──────────────────────────────────────────────────────────────
 ARDUINO_CLI_PATH: str = os.getenv("ARDUINO_CLI_PATH", "arduino-cli")

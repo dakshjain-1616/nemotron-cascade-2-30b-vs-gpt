@@ -1,5 +1,5 @@
 """
-Model interfaces for Nemotron Cascade 3 and GPT-4.1.
+Model interfaces for Nemotron Cascade 3 and GPT-5.4 Nano.
 
 Both implement the same ModelInterface so evaluator code is model-agnostic.
 A MockModel is provided for CI / demo usage when no API keys are set.
@@ -132,11 +132,11 @@ class NemotronModel(ModelInterface):
         )
 
 
-# ── GPT-4.1 ──────────────────────────────────────────────────────────────────
+# ── GPT-5.4 Nano ─────────────────────────────────────────────────────────────
 
 class GPT41Model(ModelInterface):
-    """GPT-4.1 model interface."""
-    name = "GPT-4.1"
+    """GPT-5.4 Nano model interface."""
+    name = "GPT-5.4 Nano"
 
     def fix_bug(self, bug: ArduinoBug) -> ModelResponse:
         prompt = self._build_prompt(bug)
