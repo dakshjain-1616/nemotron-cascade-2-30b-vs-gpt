@@ -30,12 +30,12 @@ OPENROUTER_API_BASE: str = "https://openrouter.ai/api/v1"
 # ── NVIDIA / Nemotron ────────────────────────────────────────────────────────
 NVIDIA_API_KEY: str = os.getenv("NVIDIA_API_KEY", "")
 NVIDIA_API_BASE: str = os.getenv("NVIDIA_API_BASE", "https://integrate.api.nvidia.com/v1")
-NEMOTRON_MODEL: str = os.getenv("NEMOTRON_MODEL", "nvidia/llama-3.3-nemotron-super-49b-v1")
+NEMOTRON_MODEL: str = os.getenv("NEMOTRON_MODEL", "nvidia/nemotron-3-super-120b-a12b")
 
 # ── OpenAI / GPT ─────────────────────────────────────────────────────────────
 OPENAI_API_KEY: str = os.getenv("OPENAI_API_KEY", "")
 OPENAI_API_BASE: str = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
-OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "openai/gpt-4.5-turbo")
+OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "openai/gpt-5.4-nano")
 
 # ── Arduino CLI ──────────────────────────────────────────────────────────────
 ARDUINO_CLI_PATH: str = os.getenv("ARDUINO_CLI_PATH", "arduino-cli")

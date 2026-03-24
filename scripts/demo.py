@@ -39,7 +39,7 @@ def main() -> int:
     console.print()
     console.print(Panel.fit(
         "[bold]⚡ Arduino AI Battle — Demo[/bold]\n"
-        "Nemotron Cascade 3 vs GPT-5.4 Nano on real Arduino bugs",
+        "Nemotron 3 Super vs GPT-5.4 Nano on real Arduino bugs",
         border_style="green",
     ))
 

@@ -1,4 +1,4 @@
-# Nemotron Cascade 3 vs GPT-5.4 Nano – Real-World Arduino Bug Benchmark
+# Nemotron 3 Super vs GPT-5.4 Nano – Real-World Arduino Bug Benchmark
 
 > *Made autonomously using [NEO](https://heyneo.so) · [![Install NEO Extension](https://img.shields.io/badge/VS%20Code-Install%20NEO-7B61FF?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=NeoResearchInc.heyneo)*
 
@@ -7,7 +7,7 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-nemotron--cascade--3--vs--gpt-181717?logo=github)](https://github.com/dakshjain-1616/nemotron-cascade-2-30b-vs-gpt)
 
-**Head-to-head battle between NVIDIA Nemotron Cascade 3 and OpenAI GPT-5.4 Nano on the messy, hardware-specific embedded bugs that real Arduino developers actually hit — not sanitised textbook exercises.**
+**Head-to-head battle between NVIDIA Nemotron 3 Super and OpenAI GPT-5.4 Nano on the messy, hardware-specific embedded bugs that real Arduino developers actually hit — not sanitised textbook exercises.**
 
 ---
 
@@ -231,8 +231,8 @@ All settings can be overridden via environment variables:
 | `NVIDIA_API_KEY` | — | Direct NVIDIA NIM API (alternative to OpenRouter) |
 | `OPENAI_API_KEY` | — | Direct OpenAI API (alternative to OpenRouter) |
 | `OPENAI_BASE_URL` | — | Override base URL for OpenAI-compatible proxies |
-| `NEMOTRON_MODEL` | `nvidia/llama-3.3-nemotron-super-49b-v1` | Nemotron model identifier |
-| `OPENAI_MODEL` | `openai/gpt-4.5-turbo` | GPT-5.4 Nano model identifier |
+| `NEMOTRON_MODEL` | `nvidia/nemotron-3-super-120b-a12b` | Nemotron model identifier |
+| `OPENAI_MODEL` | `openai/gpt-5.4-nano` | GPT-5.4 Nano model identifier |
 | `OUTPUT_DIR` | `./results` | Output directory (overridden by `--output-dir`) |
 | `MAX_TOKENS` | `1024` | Maximum tokens per model response |
 | `TEMPERATURE` | `0.2` | Sampling temperature |

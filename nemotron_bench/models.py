@@ -1,5 +1,5 @@
 """
-Model interfaces for Nemotron Cascade 3 and GPT-5.4 Nano.
+Model interfaces for Nemotron 3 Super and GPT-5.4 Nano.
 
 Both implement the same ModelInterface so evaluator code is model-agnostic.
 A MockModel is provided for CI / demo usage when no API keys are set.
