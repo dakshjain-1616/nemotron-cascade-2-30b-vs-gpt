@@ -39,7 +39,7 @@ def main() -> int:
     console.print()
     console.print(Panel.fit(
         "[bold]⚡ Arduino AI Battle — Demo[/bold]\n"
-        "Benchmarking Nemotron vs GPT-Nano on real Arduino bugs",
+        "Nemotron Cascade 3 vs GPT-4.1 on real Arduino bugs",
         border_style="green",
     ))
 
@@ -58,7 +58,7 @@ def main() -> int:
         console.print("[green]API keys detected → running in LIVE mode.[/green]\n")
 
     # ── Load 5 seed bugs (fast) ────────────────────────────────────────────────
-    from scraper import SEED_BUGS
+    from nemotron_bench.scraper import SEED_BUGS
     bugs = SEED_BUGS[:5]
     console.print(f"[dim]Using {len(bugs)} seed bugs for demo:[/dim]")
     for b in bugs:
@@ -66,9 +66,9 @@ def main() -> int:
     console.print()
 
     # ── Run battle ─────────────────────────────────────────────────────────────
-    from models import get_models
-    from evaluator import evaluate
-    from reporter import generate_report, save_json
+    from nemotron_bench.models import get_models
+    from nemotron_bench.evaluator import evaluate
+    from nemotron_bench.reporter import generate_report, save_json
 
     nemotron, gpt = get_models(force_mock=mock_mode)
 
@@ -85,7 +85,7 @@ def main() -> int:
         # Quick per-bug output
         winner_str = {
             "nemotron": f"[green]Nemotron[/green] ({result.nemotron_total:.2f})",
-            "gpt": f"[cyan]GPT-Nano[/cyan] ({result.gpt_total:.2f})",
+            "gpt": f"[cyan]GPT-4.1[/cyan] ({result.gpt_total:.2f})",
             "tie": f"[yellow]Tie[/yellow]",
         }.get(result.winner, result.winner)
         console.print(f"         Winner: {winner_str}")
@@ -104,10 +104,10 @@ def main() -> int:
 
     console.print()
     console.print(f"  [bold]Nemotron[/bold] wins: [green]{nem_wins}[/green]  |  "
-                  f"[bold]GPT-Nano[/bold] wins: [cyan]{gpt_wins}[/cyan]  |  "
+                  f"[bold]GPT-4.1[/bold] wins: [cyan]{gpt_wins}[/cyan]  |  "
                   f"Ties: [yellow]{ties}[/yellow]")
     console.print(f"  Avg scores — Nemotron: [green]{nem_avg:.3f}[/green]  "
-                  f"GPT-Nano: [cyan]{gpt_avg:.3f}[/cyan]")
+                  f"GPT-4.1: [cyan]{gpt_avg:.3f}[/cyan]")
 
     # ── Write outputs ──────────────────────────────────────────────────────────
     out_dir = os.getenv("OUTPUT_DIR", "./demo_results")

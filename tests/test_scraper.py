@@ -4,7 +4,7 @@ from __future__ import annotations
 import pytest
 from unittest.mock import patch
 
-from scraper import (
+from nemotron_bench.scraper import (
     ArduinoBug,
     SEED_BUGS,
     fetch_bugs,
@@ -112,24 +112,24 @@ class TestExtractCode:
 class TestFetchBugs:
     def test_returns_requested_count_with_seeds(self):
         # Patch network to fail so we get seed bugs
-        with patch("scraper._search_forum", return_value=[]):
+        with patch("nemotron_bench.scraper._search_forum", return_value=[]):
             bugs = fetch_bugs(3)
         assert len(bugs) == 3
 
     def test_returns_correct_type(self):
-        with patch("scraper._search_forum", return_value=[]):
+        with patch("nemotron_bench.scraper._search_forum", return_value=[]):
             bugs = fetch_bugs(2)
         for bug in bugs:
             assert isinstance(bug, ArduinoBug)
 
     def test_cycles_seeds_when_count_exceeds_seeds(self):
         n_seeds = len(SEED_BUGS)
-        with patch("scraper._search_forum", return_value=[]):
+        with patch("nemotron_bench.scraper._search_forum", return_value=[]):
             bugs = fetch_bugs(n_seeds + 3)
         assert len(bugs) == n_seeds + 3
 
     def test_prepends_live_bugs(self):
         live = [ArduinoBug(title="live", body="b", url="http://live")]
-        with patch("scraper._search_forum", return_value=live):
+        with patch("nemotron_bench.scraper._search_forum", return_value=live):
             bugs = fetch_bugs(2)
         assert bugs[0].url == "http://live"

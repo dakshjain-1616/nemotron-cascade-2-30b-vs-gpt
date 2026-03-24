@@ -6,10 +6,10 @@ import json
 import pytest
 from unittest.mock import patch
 
-from battle import parse_args, run_battle, print_summary
-from scraper import SEED_BUGS
-from models import MockModel
-from evaluator import evaluate
+from nemotron_bench.battle import parse_args, run_battle, print_summary
+from nemotron_bench.scraper import SEED_BUGS
+from nemotron_bench.models import MockModel
+from nemotron_bench.evaluator import evaluate
 
 
 # ── parse_args ────────────────────────────────────────────────────────────────
@@ -66,36 +66,36 @@ class TestRunBattle:
 
 class TestMain:
     def test_main_mock_mode(self, tmp_path):
-        from battle import main
+        from nemotron_bench.battle import main
         args = [
             "--count", "3",
             "--mock",
             "--output-dir", str(tmp_path),
         ]
-        with patch("scraper._search_forum", return_value=[]):
+        with patch("nemotron_bench.scraper._search_forum", return_value=[]):
             exit_code = main(args)
         assert exit_code == 0
 
     def test_main_creates_html(self, tmp_path):
-        from battle import main
+        from nemotron_bench.battle import main
         args = [
             "--count", "2",
             "--mock",
             "--output-dir", str(tmp_path),
         ]
-        with patch("scraper._search_forum", return_value=[]):
+        with patch("nemotron_bench.scraper._search_forum", return_value=[]):
             main(args)
         html_files = list(tmp_path.glob("*.html"))
         assert len(html_files) == 1
 
     def test_main_creates_json(self, tmp_path):
-        from battle import main
+        from nemotron_bench.battle import main
         args = [
             "--count", "2",
             "--mock",
             "--output-dir", str(tmp_path),
         ]
-        with patch("scraper._search_forum", return_value=[]):
+        with patch("nemotron_bench.scraper._search_forum", return_value=[]):
             main(args)
         json_files = list(tmp_path.glob("*.json"))
         assert len(json_files) == 1
@@ -103,14 +103,14 @@ class TestMain:
         assert len(data) == 2
 
     def test_main_no_html_flag(self, tmp_path):
-        from battle import main
+        from nemotron_bench.battle import main
         args = [
             "--count", "2",
             "--mock",
             "--no-html",
             "--output-dir", str(tmp_path),
         ]
-        with patch("scraper._search_forum", return_value=[]):
+        with patch("nemotron_bench.scraper._search_forum", return_value=[]):
             main(args)
         html_files = list(tmp_path.glob("*.html"))
         assert len(html_files) == 0

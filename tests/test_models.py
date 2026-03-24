@@ -5,12 +5,13 @@ import os
 import pytest
 from unittest.mock import patch
 
-from scraper import SEED_BUGS, ArduinoBug
-from models import (
+from nemotron_bench.scraper import SEED_BUGS, ArduinoBug
+from nemotron_bench.models import (
     ModelResponse,
     MockModel,
     NemotronModel,
     GPTNanoModel,
+    GPT41Model,
     get_models,
     extract_code_blocks,
     _MOCK_RESPONSES,
@@ -93,12 +94,12 @@ class TestMockModel:
         )
 
     def test_i2c_gpt_gives_concise_fix(self):
-        """GPT-Nano should give a concise fix for I2C bug (shorter than Nemotron)."""
+        """GPT-4.1 should give a concise fix for I2C bug (shorter than Nemotron)."""
         i2c_bug = next(b for b in SEED_BUGS if b.category == "i2c")
         nem_resp = self.nemotron.fix_bug(i2c_bug)
         gpt_resp = self.gpt.fix_bug(i2c_bug)
         assert gpt_resp.word_count < nem_resp.word_count, (
-            "GPT-Nano should be more concise than Nemotron on I2C bug"
+            "GPT-4.1 should be more concise than Nemotron on I2C bug"
         )
 
     # ── Test spec: Memory corruption ──────────────────────────────────────────
@@ -114,12 +115,12 @@ class TestMockModel:
             )
 
     def test_memory_gpt_explains_fix(self):
-        """GPT-Nano should explain the fix for the memory corruption bug."""
+        """GPT-4.1 should explain the fix for the memory corruption bug."""
         mem_bug = next(b for b in SEED_BUGS if b.category == "memory")
         resp = self.gpt.fix_bug(mem_bug)
         lower = resp.raw_text.lower()
         assert any(kw in lower for kw in ["fix", "increase", "size", "width", "char", "buf"]), (
-            f"GPT-Nano should explain fix. Got: {resp.raw_text[:200]}"
+            f"GPT-4.1 should explain fix. Got: {resp.raw_text[:200]}"
         )
 
     # ── Test spec: Peripheral conflict ────────────────────────────────────────
@@ -133,12 +134,12 @@ class TestMockModel:
         )
 
     def test_peripheral_gpt_recommends_alternative(self):
-        """GPT-Nano should recommend a fix for the peripheral conflict."""
+        """GPT-4.1 should recommend a fix for the peripheral conflict."""
         peri_bug = next(b for b in SEED_BUGS if b.category == "peripheral")
         resp = self.gpt.fix_bug(peri_bug)
         lower = resp.raw_text.lower()
         assert any(kw in lower for kw in ["timer2", "servotime", "alternative", "recommend", "avoid"]), (
-            f"GPT-Nano should recommend alternative. Got: {resp.raw_text[:200]}"
+            f"GPT-4.1 should recommend alternative. Got: {resp.raw_text[:200]}"
         )
 
     def test_mock_response_has_latency(self):
@@ -151,7 +152,7 @@ class TestMockModel:
         assert resp.completion_tokens > 0
 
     def test_all_categories_covered(self):
-        from scraper import SEED_BUGS as _seeds
+        from nemotron_bench.scraper import SEED_BUGS as _seeds
         categories = {b.category for b in _seeds}
         for cat in categories:
             assert cat in _MOCK_RESPONSES or "general" in _MOCK_RESPONSES
@@ -181,7 +182,7 @@ class TestGetModels:
         with patch.dict(os.environ, {"NVIDIA_API_KEY": "", "OPENAI_API_KEY": "", "OPENROUTER_API_KEY": ""}):
             # Need to reload config after patching
             import importlib
-            import config as cfg
+            from nemotron_bench import config as cfg
             importlib.reload(cfg)
             nem, gpt = get_models(force_mock=False)
             # With empty keys, config.mock_mode() returns True
@@ -193,11 +194,15 @@ class TestGetModels:
             "OPENAI_API_KEY": "sk-realkey456",
         }):
             import importlib
-            import config as cfg
+            from nemotron_bench import config as cfg
             importlib.reload(cfg)
-            from models import NemotronModel, GPTNanoModel
+            from nemotron_bench.models import NemotronModel, GPT41Model
             # Just verify we can instantiate them
             nem = NemotronModel()
-            gpt = GPTNanoModel()
+            gpt = GPT41Model()
             assert isinstance(nem, NemotronModel)
-            assert isinstance(gpt, GPTNanoModel)
+            assert isinstance(gpt, GPT41Model)
+
+    def test_gptnanmodel_alias(self):
+        """GPTNanoModel is a backward-compat alias for GPT41Model."""
+        assert GPTNanoModel is GPT41Model

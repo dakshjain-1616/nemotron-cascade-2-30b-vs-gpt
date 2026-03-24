@@ -1,13 +1,13 @@
-# Nemotron Cascade 2-30B vs GPT-4.1-nano – Real-World Arduino Bug Benchmark
+# Nemotron Cascade 3 vs GPT-4.1 – Real-World Arduino Bug Benchmark
 
 > *Made autonomously using [NEO](https://heyneo.so) · [![Install NEO Extension](https://img.shields.io/badge/VS%20Code-Install%20NEO-7B61FF?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=NeoResearchInc.heyneo)*
 
-[![Tests](https://img.shields.io/badge/tests-105%20passed-brightgreen)](tests/)
+[![Tests](https://img.shields.io/badge/tests-106%20passed-brightgreen)](tests/)
 [![Python](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![GitHub](https://img.shields.io/badge/GitHub-nemotron--cascade--2--30b--vs--gpt-181717?logo=github)](https://github.com/dakshjain-1616/nemotron-cascade-2-30b-vs-gpt)
+[![GitHub](https://img.shields.io/badge/GitHub-nemotron--cascade--3--vs--gpt-181717?logo=github)](https://github.com/dakshjain-1616/nemotron-cascade-2-30b-vs-gpt)
 
-**Head-to-head battle between NVIDIA Nemotron Cascade 2-30B and OpenAI GPT-4.1-nano on the messy, hardware-specific embedded bugs that real Arduino developers actually hit — not sanitised textbook exercises.**
+**Head-to-head battle between NVIDIA Nemotron Cascade 3 and OpenAI GPT-4.1 on the messy, hardware-specific embedded bugs that real Arduino developers actually hit — not sanitised textbook exercises.**
 
 ---
 
@@ -99,7 +99,9 @@ Python 3.8 or later is required.
 The fastest way to see the benchmark in action. Mock mode uses canned responses and completes in seconds:
 
 ```bash
-python battle.py --mock --count 5
+python -m nemotron_bench.battle --mock --count 5
+# or after pip install -e .:
+nemotron-bench --mock --count 5
 ```
 
 This runs all five seed bugs through both mock models, prints a per-bug winner table to stdout, and writes `results/battle_results.json`.
@@ -107,7 +109,7 @@ This runs all five seed bugs through both mock models, prints a per-bug winner t
 To also generate the interactive HTML leaderboard:
 
 ```bash
-python battle.py --mock --count 5 --output-dir results/
+python -m nemotron_bench.battle --mock --count 5 --output-dir results/
 ```
 
 Open `results/battle_report.html` in a browser. The report shows:
@@ -125,7 +127,7 @@ Open `results/battle_report.html` in a browser. The report shows:
 
 ```bash
 export OPENROUTER_API_KEY=sk-or-...
-python battle.py --count 10 --workers 2
+python -m nemotron_bench.battle --count 10 --workers 2
 ```
 
 ### Via native APIs
@@ -133,13 +135,13 @@ python battle.py --count 10 --workers 2
 ```bash
 export NVIDIA_API_KEY=nvapi-...
 export OPENAI_API_KEY=sk-...
-python battle.py --count 10
+python -m nemotron_bench.battle --count 10
 ```
 
 Use `--workers` to parallelise model calls and reduce wall-clock time on larger runs:
 
 ```bash
-python battle.py --count 50 --workers 4 --output-dir results/full-run/
+python -m nemotron_bench.battle --count 50 --workers 4 --output-dir results/full-run/
 ```
 
 ---
@@ -147,7 +149,8 @@ python battle.py --count 50 --workers 4 --output-dir results/full-run/
 ## CLI reference
 
 ```
-python battle.py [OPTIONS]
+python -m nemotron_bench.battle [OPTIONS]
+# or: nemotron-bench [OPTIONS]  (after pip install -e .)
 ```
 
 | Flag | Default | Description |
@@ -163,9 +166,7 @@ python battle.py [OPTIONS]
 ## Python API
 
 ```python
-from battle import run_battle
-from models import get_models
-from scraper import SEED_BUGS
+from nemotron_bench import run_battle, get_models, SEED_BUGS
 
 # Mock models — no API keys required
 nemotron, gpt = get_models(force_mock=True)
@@ -174,7 +175,7 @@ results = run_battle(SEED_BUGS[:5], nemotron, gpt, workers=1)
 for r in results:
     print(f"{r.bug_title}: winner={r.winner}  nem={r.nemotron_total:.2f}  gpt={r.gpt_total:.2f}")
 
-# Real models — reads API keys from environment
+# Real models — reads OPENROUTER_API_KEY / NVIDIA_API_KEY / OPENAI_API_KEY from env
 nemotron, gpt = get_models()
 results = run_battle(SEED_BUGS, nemotron, gpt, workers=2)
 ```
@@ -230,8 +231,8 @@ All settings can be overridden via environment variables:
 | `NVIDIA_API_KEY` | — | Direct NVIDIA NIM API (alternative to OpenRouter) |
 | `OPENAI_API_KEY` | — | Direct OpenAI API (alternative to OpenRouter) |
 | `OPENAI_BASE_URL` | — | Override base URL for OpenAI-compatible proxies |
-| `NEMOTRON_MODEL` | `nvidia/llama-3.1-nemotron-70b-instruct` | Nemotron model identifier |
-| `OPENAI_MODEL` | `openai/gpt-4o-mini` | GPT model identifier |
+| `NEMOTRON_MODEL` | `nvidia/llama-3.3-nemotron-super-49b-v1` | Nemotron model identifier |
+| `OPENAI_MODEL` | `openai/gpt-4.1` | GPT model identifier |
 | `OUTPUT_DIR` | `./results` | Output directory (overridden by `--output-dir`) |
 | `MAX_TOKENS` | `1024` | Maximum tokens per model response |
 | `TEMPERATURE` | `0.2` | Sampling temperature |
@@ -245,22 +246,31 @@ All settings can be overridden via environment variables:
 pytest
 ```
 
-105 tests covering the scraper, evaluator scoring logic, mock model responses, and report generation.
+106 tests covering the scraper, evaluator scoring logic, mock model responses, and report generation.
 
 ---
 
 ## Project structure
 
 ```
-.
-├── battle.py        # CLI entry point and run_battle() orchestrator
-├── models.py        # Model wrappers: NemotronModel, GPTModel, MockModel, get_models()
-├── evaluator.py     # Scoring: compilability, correctness, verbosity heuristics
-├── scraper.py       # SEED_BUGS definitions and forum scraping utilities
-├── reporter.py      # HTML report generation from battle results
-├── config.py        # Environment variable loading and defaults
-├── conftest.py      # Shared pytest fixtures
-├── requirements.txt # Dependencies (openai SDK + stdlib only)
-├── tests/           # 105 unit and integration tests
-└── scripts/         # Helper scripts for data collection and result analysis
+nemotron-cascade-2-30b-vs-gpt/
+├── nemotron_bench/          # Main Python package
+│   ├── __init__.py          # Public API exports
+│   ├── battle.py            # CLI entry point + run_battle() orchestrator
+│   ├── config.py            # Environment variable loading and model defaults
+│   ├── evaluator.py         # Scoring: compilability, correctness, verbosity
+│   ├── models.py            # NemotronModel, GPT41Model, MockModel, get_models()
+│   ├── reporter.py          # HTML + JSON report generation
+│   └── scraper.py           # SEED_BUGS + live forum scraping
+├── tests/                   # 106 unit and integration tests
+│   ├── test_battle.py
+│   ├── test_evaluator.py
+│   ├── test_models.py
+│   ├── test_reporter.py
+│   └── test_scraper.py
+├── scripts/
+│   └── demo.py              # Zero-config runnable demo
+├── conftest.py              # pytest path setup
+├── setup.py                 # Package + nemotron-bench CLI entry point
+└── requirements.txt
 ```

@@ -7,10 +7,10 @@ import tempfile
 
 import pytest
 
-from scraper import SEED_BUGS
-from models import MockModel
-from evaluator import evaluate, EvalResult
-from reporter import generate_report, save_json, _render_diff, _pct
+from nemotron_bench.scraper import SEED_BUGS
+from nemotron_bench.models import MockModel
+from nemotron_bench.evaluator import evaluate, EvalResult
+from nemotron_bench.reporter import generate_report, save_json, _render_diff, _pct
 
 
 # ── Fixtures ───────────────────────────────────────────────────────────────────

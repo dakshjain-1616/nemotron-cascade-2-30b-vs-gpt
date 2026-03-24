@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import pytest
 
-from scraper import SEED_BUGS, ArduinoBug
-from models import ModelResponse, MockModel
-from evaluator import (
+from nemotron_bench.scraper import SEED_BUGS, ArduinoBug
+from nemotron_bench.models import ModelResponse, MockModel
+from nemotron_bench.evaluator import (
     EvalResult,
     evaluate,
     score_compilability,
