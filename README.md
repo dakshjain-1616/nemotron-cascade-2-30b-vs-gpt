@@ -11,6 +11,38 @@
 
 ---
 
+## Visual Results
+
+### Overview
+
+![Hero infographic — overall benchmark results](output/infographic_hero.png)
+
+### Animated Summary
+
+![Animated benchmark walkthrough](output/benchmark_animation.gif)
+
+### Metric-by-Metric Breakdown
+
+![Metrics comparison bar chart](output/infographic_metrics.png)
+
+### Speed vs Quality Trade-off
+
+![Speed vs quality scatter plot](output/infographic_scatter.png)
+
+### Per-Bug Scores
+
+![Per-bug score breakdown](output/infographic_perbug.png)
+
+### Response Latency per Bug
+
+![Latency comparison per bug](output/infographic_latency.png)
+
+### Scorecard (Twitter / LinkedIn)
+
+![Scorecard landscape infographic](output/infographic_scorecard.png)
+
+---
+
 ## Real-World Benchmark Results
 
 Scored on 5 real Arduino forum bugs via OpenRouter (live API, no mocks):
@@ -110,7 +142,8 @@ No heavy ML dependencies. Pure Python plus the OpenAI SDK.
 ```bash
 git clone https://github.com/dakshjain-1616/nemotron3-super-vs-gpt54-nano
 cd nemotron3-super-vs-gpt54-nano
-pip install -r requirements.txt
+python3 -m venv .venv && source .venv/bin/activate
+pip3 install -r requirements.txt
 ```
 
 Python 3.8 or later is required.
@@ -122,8 +155,8 @@ Python 3.8 or later is required.
 The fastest way to see the benchmark in action. Mock mode uses canned responses and completes in seconds:
 
 ```bash
-python -m nemotron_bench.battle --mock --count 5
-# or after pip install -e .:
+python3 -m nemotron_bench.battle --mock --count 5
+# or after pip3 install -e . (inside a venv):
 nemotron-bench --mock --count 5
 ```
 
@@ -132,7 +165,7 @@ This runs all five seed bugs through both mock models, prints a per-bug winner t
 To also generate the interactive HTML leaderboard:
 
 ```bash
-python -m nemotron_bench.battle --mock --count 5 --output-dir results/
+python3 -m nemotron_bench.battle --mock --count 5 --output-dir results/
 ```
 
 Open `results/battle_report.html` in a browser. The report shows:
@@ -150,7 +183,7 @@ Open `results/battle_report.html` in a browser. The report shows:
 
 ```bash
 export OPENROUTER_API_KEY=sk-or-...
-python -m nemotron_bench.battle --count 10 --workers 2
+python3 -m nemotron_bench.battle --count 10 --workers 2
 ```
 
 ### Via native APIs
@@ -158,13 +191,13 @@ python -m nemotron_bench.battle --count 10 --workers 2
 ```bash
 export NVIDIA_API_KEY=nvapi-...
 export OPENAI_API_KEY=sk-...
-python -m nemotron_bench.battle --count 10
+python3 -m nemotron_bench.battle --count 10
 ```
 
 Use `--workers` to parallelise model calls and reduce wall-clock time on larger runs:
 
 ```bash
-python -m nemotron_bench.battle --count 50 --workers 4 --output-dir results/full-run/
+python3 -m nemotron_bench.battle --count 50 --workers 4 --output-dir results/full-run/
 ```
 
 ---
@@ -172,8 +205,8 @@ python -m nemotron_bench.battle --count 50 --workers 4 --output-dir results/full
 ## CLI reference
 
 ```
-python -m nemotron_bench.battle [OPTIONS]
-# or: nemotron-bench [OPTIONS]  (after pip install -e .)
+python3 -m nemotron_bench.battle [OPTIONS]
+# or: nemotron-bench [OPTIONS]  (after pip3 install -e . inside a venv)
 ```
 
 | Flag | Default | Description |
@@ -189,6 +222,7 @@ python -m nemotron_bench.battle [OPTIONS]
 ## Python API
 
 ```python
+# python3 yourscript.py
 from nemotron_bench import run_battle, get_models, SEED_BUGS
 
 # Mock models — no API keys required
@@ -266,7 +300,7 @@ All settings can be overridden via environment variables:
 ## Run tests
 
 ```bash
-pytest
+python3 -m pytest
 ```
 
 106 tests covering the scraper, evaluator scoring logic, mock model responses, and report generation.
@@ -285,6 +319,17 @@ nemotron3-super-vs-gpt54-nano/
 │   ├── models.py            # NemotronModel, GPT41Model, MockModel, get_models()
 │   ├── reporter.py          # HTML + JSON report generation
 │   └── scraper.py           # SEED_BUGS + live forum scraping
+├── output/                  # Generated infographics and animation
+│   ├── infographic_hero.png       # 1080×1080 Instagram overview
+│   ├── infographic_metrics.png    # Metric-by-metric bar chart
+│   ├── infographic_perbug.png     # Per-bug score breakdown
+│   ├── infographic_scatter.png    # Speed vs quality scatter
+│   ├── infographic_latency.png    # Latency per bug
+│   ├── infographic_scorecard.png  # Twitter/LinkedIn landscape card
+│   └── benchmark_animation.gif   # Animated slideshow
+├── benchmark_output/        # Live API run results
+│   ├── battle_results.json
+│   └── battle_report.html
 ├── tests/                   # 106 unit and integration tests
 │   ├── test_battle.py
 │   ├── test_evaluator.py
@@ -292,8 +337,16 @@ nemotron3-super-vs-gpt54-nano/
 │   ├── test_reporter.py
 │   └── test_scraper.py
 ├── scripts/
-│   └── demo.py              # Zero-config runnable demo
+│   ├── demo.py                    # Zero-config runnable demo
+│   └── generate_infographics.py   # Regenerate output/ assets
 ├── conftest.py              # pytest path setup
 ├── setup.py                 # Package + nemotron-bench CLI entry point
 └── requirements.txt
+```
+
+To regenerate all infographics:
+
+```bash
+pip3 install matplotlib imageio Pillow numpy
+python3 scripts/generate_infographics.py
 ```

@@ -30,6 +30,9 @@ results/
 demo_results/
 *.log
 
+# Benchmark output — exclude HTML (large), keep JSON
+benchmark_output/*.html
+
 # IDE
 .idea/
 .vscode/
