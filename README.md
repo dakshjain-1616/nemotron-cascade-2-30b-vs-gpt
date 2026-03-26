@@ -7,6 +7,67 @@
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![GitHub](https://img.shields.io/badge/GitHub-nemotron3--super--vs--gpt54--nano-181717?logo=github)](https://github.com/dakshjain-1616/nemotron3-super-vs-gpt54-nano)
 
+## Quickstart
+
+Run a benchmark comparison between Nemotron 3 Super and GPT-5.4 Nano on Arduino firmware bugs:
+
+```python
+from nemotron_bench import run_battle, get_models, SEED_BUGS
+
+# Get mock models (no API keys needed)
+nemotron, gpt = get_models(force_mock=True)
+
+# Run benchmark on first 3 bugs
+results = run_battle(SEED_BUGS[:3], nemotron, gpt)
+
+# Print results
+for r in results:
+    print(f"{r.bug_title}:")
+    print(f"  Nemotron: {r.nemotron_total:.2f}")
+    print(f"  GPT-5.4: {r.gpt_total:.2f}")
+    print(f"  Winner: {r.winner}")
+```
+
+## Example Output
+
+Sample benchmark results for an I2C timing bug:
+
+```json
+{
+  "title": "I2C bus hang — SDA never released",
+  "winner": "gpt",
+  "nemotron": {
+    "compilable": 0.10,
+    "correctness": 0.962,
+    "verbosity": 0.15,
+    "total": 0.455
+  },
+  "gpt": {
+    "compilable": 0.10,
+    "correctness": 1.000,
+    "verbosity": 0.60,
+    "total": 0.560
+  }
+}
+```
+
+```mermaid
+graph TD
+    A[Arduino Bug Report] --> B[Nemotron 3 Super]
+    A --> C[GPT-5.4 Nano]
+    B --> D[Compilability Check]
+    C --> D
+    B --> E[Correctness Analysis]
+    C --> E
+    B --> F[Verbosity Scoring]
+    C --> F
+    D --> G[Weighted Score Calculation]
+    E --> G
+    F --> G
+    G --> H[Result Comparison]
+    H --> I[HTML/JSON Reports]
+```
+
 **Head-to-head battle between NVIDIA Nemotron 3 Super and OpenAI GPT-5.4 Nano on the messy, hardware-specific embedded bugs that real Arduino developers actually hit — not sanitised textbook exercises.**
 
 ---
