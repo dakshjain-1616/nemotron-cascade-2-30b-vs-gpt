@@ -135,6 +135,17 @@ Five embedded failure modes drawn from real forum threads:
 
 ---
 
+
+```markdown
+## The Problem
+
+Current Arduino firmware debugging relies on manual code inspection or basic static analyzers that miss complex timing bugs and hardware-software interactions. Developers lack tools to benchmark large language models (LLMs) for firmware debugging accuracy, especially when comparing cutting-edge models like Nemotron 3 Super (120B) and GPT-5.4 Nano on real-world Arduino bugs involving interrupt conflicts or memory corruption.
+
+## Who it's for
+
+Embedded systems engineers who need to validate LLM-assisted debugging for resource-constrained Arduino projects, particularly when choosing between high-parameter models (Nemotron) and optimized lightweight models (GPT-Nano) for CI/CD pipelines.
+```
+
 ## Install
 
 No heavy ML dependencies. Pure Python plus the OpenAI SDK.
